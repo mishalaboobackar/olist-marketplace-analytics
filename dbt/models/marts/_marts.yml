@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: fct_orders
+    description: >
+      Order-grain fact table combining order status, delivery performance,
+      revenue, and review score. Primary table for analysis and BI.
+    columns:
+      - name: order_id
+        description: Primary key, one row per order.
+        tests:
+          - unique
+          - not_null
+      - name: order_status
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['delivered','shipped','canceled','unavailable','invoiced','processing','created','approved']
+      - name: review_score
+        description: 1–5 customer review score; null if no review.
+        tests:
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4, 5]
+                quote: false
+              config:
+                where: "review_score is not null"
