@@ -19,19 +19,25 @@ Kaggle CSVs (9 tables, ~100k orders)
    Power BI / Tableau dashboard  +  written case study
 ```
 
-*(Add your dbt lineage screenshot and architecture diagram here.)*
+> Nine raw CSVs load into BigQuery, get modeled and tested with dbt into a star schema, then feed SQL analysis and a BI dashboard. Lineage diagram and dashboard screenshots are added as the project progresses.
 
 ## Stack
 BigQuery · dbt Core · SQL · Python (pandas, scikit-learn, statsmodels) · Power BI / Tableau · Git
 
+## Project status
+- [x] Cloud warehouse set up (BigQuery), 100k+ orders loaded across 9 tables
+- [x] dbt pipeline: staging views + star-schema marts, with passing data-quality tests
+- [x] Revenue-trend analysis
+- [ ] Delivery, satisfaction, and seller analysis (in progress)
+- [ ] Experiment design (A/B test)
+- [ ] BI dashboard
+- [ ] Written case study
+
 ## Key findings
-*(Fill in after Phase 3–5. Example structure:)*
-1. **Late deliveries drive dissatisfaction.** Orders delivered past estimate scored ~X points lower on reviews, controlling for category, price, and freight.
-2. **Revenue concentration risk.** The top X% of sellers drive Y% of GMV; their late-rate is Z%.
-3. **One-time buyers dominate.** ~X% of customers never repurchase, so first-order experience is the whole game.
+Analysis in progress. This section will summarize the main findings on delivery performance, customer satisfaction, revenue concentration, and repeat-purchase behavior as each is completed.
 
 ## Recommendation
-*(Your designed A/B test: hypothesis, metric, guardrails, sample size, expected lift.)*
+To be added after the experimentation phase: a designed A/B test (hypothesis, primary and guardrail metrics, sample size, and expected lift) targeting the biggest driver found in the analysis.
 
 ## Repo structure
 ```
