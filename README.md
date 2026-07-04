@@ -34,7 +34,12 @@ BigQuery · dbt Core · SQL · Python (pandas, scikit-learn, statsmodels) · Pow
 - [ ] Written case study
 
 ## Key findings
-Analysis in progress. This section will summarize the main findings on delivery performance, customer satisfaction, revenue concentration, and repeat-purchase behavior as each is completed.
+*Analysis in progress; findings are added as each is completed.*
+
+1. **Revenue scaled fast, then plateaued.** Monthly delivered revenue grew from near zero in late 2016 to roughly R$1M per month through 2018.
+2. **Late delivery is the biggest satisfaction killer.** Late orders are only ~8% of deliveries, but they average a **2.57** review score versus **4.29** for on-time orders, and **54%** of late orders receive a 1–2 star review versus **9%** of on-time orders, roughly **6x** the bad-review rate. (Correlation; a controlled estimate follows in the experiment phase.)
+3. **Revenue is highly concentrated among top sellers.** The top 5% of sellers generate **52.5%** of revenue, the top 10% generate **66.8%**, and the top 20% generate **82.1%** — a classic Pareto pattern, so the marketplace depends heavily on a small group of sellers.
+4. **Almost every customer buys once.** **96.9%** of customers never place a second order (only **3.1%** repeat). With a one-shot relationship, the first-order experience, especially delivery, largely determines customer value, which is exactly why late deliveries are so costly.
 
 ## Recommendation
 To be added after the experimentation phase: a designed A/B test (hypothesis, primary and guardrail metrics, sample size, and expected lift) targeting the biggest driver found in the analysis.
