@@ -25,3 +25,7 @@ data/
 .DS_Store
 .Rhistory
 .user.yml
+
+# Private / personal scaffolds — keep local, not in the public repo
+LEARNING_GUIDE.md
+PROJECT_PLAN.md
