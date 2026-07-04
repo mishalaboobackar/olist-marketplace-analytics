@@ -60,5 +60,8 @@ olist-marketplace-analytics/
 Brazilian E-Commerce Public Dataset by Olist — https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
 (Real anonymized commercial data; review text anonymized with Game of Thrones house names.)
 
+## Progress log
+- Session 1: Set up BigQuery warehouse and loaded 9 raw tables (100k+ orders). Built the dbt project (staging views + `fct_orders` star-schema mart) with passing data-quality tests. Ran the first revenue-trend analysis.
+
 ## Author
 Mishal Aboobackar Manalody (Abu) · Boston, MA · mishalaboobackar.github.io
