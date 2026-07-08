@@ -16,22 +16,28 @@ Kaggle CSVs (9 tables, ~100k orders)
    BigQuery  (olist_marts)
         │  SQL analysis  +  Python modeling / experiment design
         ▼
-   Power BI / Tableau dashboard  +  written case study
+   Interactive web dashboard  +  written case study
 ```
 
 > Nine raw CSVs load into BigQuery, get modeled and tested with dbt into a star schema, then feed SQL analysis and a BI dashboard. Lineage diagram and dashboard screenshots are added as the project progresses.
 
 ## Stack
-BigQuery · dbt Core · SQL · Python (pandas, scikit-learn, statsmodels) · Power BI / Tableau · Git
+BigQuery · dbt Core · SQL · Python (pandas) · Interactive dashboard (HTML + Chart.js) · Git
 
 ## Project status
 - [x] Cloud warehouse set up (BigQuery), 100k+ orders loaded across 9 tables
 - [x] dbt pipeline: staging views + star-schema marts, with passing data-quality tests
-- [x] Revenue-trend analysis
-- [ ] Delivery, satisfaction, and seller analysis (in progress)
-- [ ] Experiment design (A/B test)
-- [ ] BI dashboard
-- [ ] Written case study
+- [x] SQL analysis: revenue trend, delivery vs reviews, seller concentration, retention
+- [x] Experiment design (A/B test) — see `EXPERIMENT_DESIGN.md`
+- [x] Interactive BI dashboard — see `dashboard/`
+- [ ] Written case study (in progress)
+
+## Dashboard
+**Live interactive dashboard (Tableau Public):** https://public.tableau.com/app/profile/mishal.aboobackar.manalody/viz/OlistDashboard_17834988830640/Dashboard1
+
+Built from the modeled data: revenue trend, review scores for late vs on-time orders, and
+revenue by Brazilian state, with click-to-filter interactivity. A self-contained HTML version
+also lives in `dashboard/index.html` (open in any browser or host free on GitHub Pages).
 
 ## Key findings
 *Analysis in progress; findings are added as each is completed.*
