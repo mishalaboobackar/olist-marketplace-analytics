@@ -1,8 +1,10 @@
 # Olist Marketplace Operations & Revenue Analytics
 
-End-to-end analytics project: raw marketplace data → cloud warehouse → dbt pipeline → SQL analysis → experiment design → BI dashboard, ending in a business recommendation.
+End-to-end analytics on a Brazilian e-commerce marketplace: raw data → cloud warehouse → dbt pipeline → SQL analysis → causal analysis & ML → experiment design → interactive dashboard, ending in business recommendations.
 
-> **Business question:** Olist, a Brazilian marketplace, is losing revenue to late deliveries and low review scores. What drives customer dissatisfaction, how much revenue is at risk, and what experiment should the company run to fix it?
+> **Business question:** Olist, a Brazilian marketplace, is losing revenue to late deliveries and low review scores. What drives customer dissatisfaction, how much revenue is at risk, and what should the company do about it?
+
+**Live dashboard (Tableau Public):** https://public.tableau.com/app/profile/mishal.aboobackar.manalody/viz/OlistDashboard_17834988830640/Dashboard1
 
 ## Architecture
 
@@ -11,70 +13,47 @@ Kaggle CSVs (9 tables, ~100k orders)
         │  load
         ▼
    BigQuery  (olist_raw)
-        │  dbt: staging → dims/facts (star schema) + tests + docs
+        │  dbt: staging → star-schema marts + data-quality tests
         ▼
    BigQuery  (olist_marts)
-        │  SQL analysis  +  Python modeling / experiment design
+        │  SQL analysis  ·  Python causal analysis + ML
         ▼
-   Interactive web dashboard  +  written case study
+   Tableau dashboard  ·  business recommendations
 ```
-
-> Nine raw CSVs load into BigQuery, get modeled and tested with dbt into a star schema, then feed SQL analysis and a BI dashboard. Lineage diagram and dashboard screenshots are added as the project progresses.
 
 ## Stack
 BigQuery · dbt Core · SQL · Python (pandas, statsmodels, scikit-learn) · Tableau · Git
 
-## Project status
-- [x] Cloud warehouse set up (BigQuery), 100k+ orders loaded across 9 tables
-- [x] dbt pipeline: staging views + star-schema marts, with passing data-quality tests
-- [x] SQL analysis: revenue trend, delivery vs reviews, seller concentration, retention
-- [x] Experiment design (A/B test) — see `EXPERIMENT_DESIGN.md`
-- [x] Causal analysis + ML model — see `notebooks/03_experiment_analysis.ipynb`
-- [x] Interactive BI dashboard — see `dashboard/`
-- [ ] Written case study (in progress)
-
-## Dashboard
-**Live interactive dashboard (Tableau Public):** https://public.tableau.com/app/profile/mishal.aboobackar.manalody/viz/OlistDashboard_17834988830640/Dashboard1
-
-Built from the modeled data: revenue trend, review scores for late vs on-time orders, and
-revenue by Brazilian state, with click-to-filter interactivity. A self-contained HTML version
-also lives in `dashboard/index.html` (open in any browser or host free on GitHub Pages).
-
 ## Key findings
-*Analysis in progress; findings are added as each is completed.*
-
 1. **Revenue scaled fast, then plateaued.** Monthly delivered revenue grew from near zero in late 2016 to roughly R$1M per month through 2018.
-2. **Late delivery is the biggest satisfaction killer.** Late orders are only ~8% of deliveries, but they average a **2.57** review score versus **4.29** for on-time orders, and **54%** of late orders receive a 1–2 star review versus **9%** of on-time orders, roughly **6x** the bad-review rate. (Correlation; a controlled estimate follows in the experiment phase.)
-3. **Revenue is highly concentrated among top sellers.** The top 5% of sellers generate **52.5%** of revenue, the top 10% generate **66.8%**, and the top 20% generate **82.1%** — a classic Pareto pattern, so the marketplace depends heavily on a small group of sellers.
-4. **Almost every customer buys once.** **96.9%** of customers never place a second order (only **3.1%** repeat). With a one-shot relationship, the first-order experience, especially delivery, largely determines customer value, which is exactly why late deliveries are so costly.
-5. **The late-delivery effect is causal, not just correlation.** In a logistic regression controlling for price, freight, item count, and estimated delivery time, a late order still has **~13x the odds** of a 1–2★ review (p < 0.001), and a Random Forest ranks late delivery the top driver by a wide margin. The effect survives the controls.
+2. **Late delivery is the biggest satisfaction killer.** Late orders are only ~8% of deliveries, but they average a **2.57** review score versus **4.29** for on-time orders, and **54%** of late orders receive a 1–2 star review versus **9%** on-time, roughly **6x** the bad-review rate.
+3. **Revenue is highly concentrated among top sellers.** The top 5% of sellers generate **52.5%** of revenue, the top 10% **66.8%**, and the top 20% **82.1%** — a classic Pareto pattern.
+4. **Almost every customer buys once.** **96.9%** of customers never place a second order. With a one-shot relationship, the first-order experience largely determines customer value.
+5. **The late-delivery effect is causal, not just correlation.** In a logistic regression controlling for price, freight, item count, and estimated delivery time, a late order still has **~13x the odds** of a 1–2★ review (p < 0.001), and a Random Forest ranks late delivery the top driver by a wide margin. (See `notebooks/03_experiment_analysis.ipynb`.)
 
-## Recommendation
-To be added after the experimentation phase: a designed A/B test (hypothesis, primary and guardrail metrics, sample size, and expected lift) targeting the biggest driver found in the analysis.
+## Recommendations
+1. **Under-promise delivery dates** (add a buffer at checkout) to cut late-vs-promise orders — validate with the A/B test in `EXPERIMENT_DESIGN.md`, watching checkout conversion as a guardrail.
+2. **Send proactive delay alerts** to soften the review hit when an order will run late.
+3. **Fix the worst routes and categories first** for the biggest logistics gain.
+4. **Protect the top 20% of sellers** who drive 82% of revenue with reliable fulfillment.
+5. **Win the second order** with a post-first-purchase retention nudge, since ~97% never return.
 
 ## Repo structure
 ```
 olist-marketplace-analytics/
 ├── README.md
-├── PROJECT_PLAN.md
+├── EXPERIMENT_DESIGN.md      # A/B test design
 ├── requirements.txt
-├── .gitignore
-├── dbt/                  # dbt project (staging + marts, tests, docs)
+├── dbt/                      # dbt project: staging + star-schema marts + tests
 │   ├── dbt_project.yml
-│   └── models/
-│       ├── staging/
-│       └── marts/
-├── analysis/            # business-question SQL
-├── notebooks/           # Python: causal estimate, driver model, experiment design
-└── dashboard/           # screenshots + Tableau Public / PBIX link
+│   └── models/{staging,marts}/
+├── analysis/                 # business-question SQL (revenue, delivery, sellers, retention)
+└── notebooks/                # Python causal analysis + ML model
 ```
 
 ## Data
 Brazilian E-Commerce Public Dataset by Olist — https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
-(Real anonymized commercial data; review text anonymized with Game of Thrones house names.)
-
-## Progress log
-- Session 1: Set up BigQuery warehouse and loaded 9 raw tables (100k+ orders). Built the dbt project (staging views + `fct_orders` star-schema mart) with passing data-quality tests. Ran the first revenue-trend analysis.
+(Real anonymized commercial data; raw CSVs are not committed — download from Kaggle to reproduce.)
 
 ## Author
 Mishal Aboobackar Manalody (Abu) · Boston, MA · mishalaboobackar.github.io
