@@ -1,0 +1,3 @@
+# Keep GitHub's language bar focused on the analytics code (SQL/Python),
+# not the large embedded dashboard HTML file.
+dashboard/index.html linguist-documentation
