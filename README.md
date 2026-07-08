@@ -22,13 +22,14 @@ Kaggle CSVs (9 tables, ~100k orders)
 > Nine raw CSVs load into BigQuery, get modeled and tested with dbt into a star schema, then feed SQL analysis and a BI dashboard. Lineage diagram and dashboard screenshots are added as the project progresses.
 
 ## Stack
-BigQuery · dbt Core · SQL · Python (pandas) · Interactive dashboard (HTML + Chart.js) · Git
+BigQuery · dbt Core · SQL · Python (pandas, statsmodels, scikit-learn) · Tableau · Git
 
 ## Project status
 - [x] Cloud warehouse set up (BigQuery), 100k+ orders loaded across 9 tables
 - [x] dbt pipeline: staging views + star-schema marts, with passing data-quality tests
 - [x] SQL analysis: revenue trend, delivery vs reviews, seller concentration, retention
 - [x] Experiment design (A/B test) — see `EXPERIMENT_DESIGN.md`
+- [x] Causal analysis + ML model — see `notebooks/03_experiment_analysis.ipynb`
 - [x] Interactive BI dashboard — see `dashboard/`
 - [ ] Written case study (in progress)
 
@@ -46,6 +47,7 @@ also lives in `dashboard/index.html` (open in any browser or host free on GitHub
 2. **Late delivery is the biggest satisfaction killer.** Late orders are only ~8% of deliveries, but they average a **2.57** review score versus **4.29** for on-time orders, and **54%** of late orders receive a 1–2 star review versus **9%** of on-time orders, roughly **6x** the bad-review rate. (Correlation; a controlled estimate follows in the experiment phase.)
 3. **Revenue is highly concentrated among top sellers.** The top 5% of sellers generate **52.5%** of revenue, the top 10% generate **66.8%**, and the top 20% generate **82.1%** — a classic Pareto pattern, so the marketplace depends heavily on a small group of sellers.
 4. **Almost every customer buys once.** **96.9%** of customers never place a second order (only **3.1%** repeat). With a one-shot relationship, the first-order experience, especially delivery, largely determines customer value, which is exactly why late deliveries are so costly.
+5. **The late-delivery effect is causal, not just correlation.** In a logistic regression controlling for price, freight, item count, and estimated delivery time, a late order still has **~13x the odds** of a 1–2★ review (p < 0.001), and a Random Forest ranks late delivery the top driver by a wide margin. The effect survives the controls.
 
 ## Recommendation
 To be added after the experimentation phase: a designed A/B test (hypothesis, primary and guardrail metrics, sample size, and expected lift) targeting the biggest driver found in the analysis.
